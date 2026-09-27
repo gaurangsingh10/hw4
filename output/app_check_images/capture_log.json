@@ -1,0 +1,32 @@
+{
+  "inventory": {
+    "reply": "Basic Hoodie Big Yale is $68.\n\nXL: 2 left — low stock!\nXS: In stock, with 15 available.\n\nBoola boola!",
+    "badge": "✓ Prices & stock checked against live inventory",
+    "cart": null
+  },
+  "showcase": {
+    "reply": "I found 27 hoodies and put them on the page for you. Highlights include Basic Hoodie Big Yale — $68, Brooks Brothers Double Knit Full Zip Hoodie Yale — $88, and Champion Full Zip Hood — $88. Tap any card for sizes and details!",
+    "badge": "✓ Prices & stock checked against live inventory",
+    "cart": null
+  },
+  "showcaseMeta": {
+    "title": "Yale Hoodies",
+    "count": "27 matches",
+    "cards": 8,
+    "firstHref": "/products/basic-hoodie-big-yale"
+  },
+  "detailPath": "/products/brooks-brothers-double-knit-full-zip-hoodie-yale",
+  "cart": {
+    "reply": "Added Saybrook Sweater Fleece Jacket in M to your cart — $98. Your cart subtotal is now $98. 💙",
+    "badge": "✓ Prices & stock checked against live inventory",
+    "cart": "🛍 Added 1 × Saybrook Sweater Fleece Jacket (M) · View cart"
+  },
+  "cartDrawer": {
+    "lines": [
+      "Saybrook Sweater Fleece Jacket | Size M · $98.00 each | − | 1 | + | $98.00 | Remove"
+    ],
+    "subtotal": "$98.00",
+    "badge": "1"
+  },
+  "toolbar": "19 of 102 items · sorted by price: low to high"
+}

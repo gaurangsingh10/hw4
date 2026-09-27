@@ -1,0 +1,192 @@
+/* =====================================================================
+   Campus Customs design system (Problem 10)
+   "Augusta, stardate 2026": Masters green, gold and azalea on cream,
+   with LCARS-style (Star Trek) pill bars, holo glows and a scan-line.
+   Loaded after index.css, so it re-skins the site without touching layout.
+   ===================================================================== */
+:root {
+  --green-deep: #012a1c;
+  --green: #006747;        /* Augusta green */
+  --green-mid: #0b7a54;
+  --glow: #3dffa8;         /* holo accent */
+  --gold: #f2c75c;         /* Masters yellow */
+  --gold-deep: #c99a2e;
+  --azalea: #e84a7f;       /* Augusta azaleas */
+  --cream: #f7f4ea;
+  --ink: #10241a;
+  --muted: #5b6b61;
+  --line: #e2dccb;
+  /* remap the original tokens so every existing component picks up the theme */
+  --blue: var(--green);
+  --blue-light: var(--green-mid);
+  --bg: var(--cream);
+  --serif: 'Playfair Display', Georgia, serif;
+  --tech: 'Orbitron', 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 110% -10%, rgba(232,74,127,.07), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(0,103,71,.08), transparent 60%),
+    var(--cream);
+}
+h1, h2 { font-family: var(--serif); letter-spacing: -.01em; color: var(--green); }
+h3 { color: var(--green); }
+a { color: var(--green-mid); }
+::selection { background: var(--gold); color: var(--green-deep); }
+
+/* Route changes fade in, like a viewscreen switching feeds */
+@keyframes feed-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+.page > * { animation: feed-in .45s ease-out both; }
+
+/* ---------- Nav: bridge console ---------- */
+.nav {
+  background: linear-gradient(180deg, rgba(1,42,28,.97), rgba(0,58,38,.95));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(242,199,92,.55);
+  box-shadow: 0 1px 0 rgba(61,255,168,.15), 0 10px 30px rgba(1,42,28,.25);
+}
+.brand { font-family: var(--serif); font-size: 26px; font-weight: 800; color: #fff; display: flex; align-items: baseline; gap: 6px; }
+.brand span { font-style: italic; font-weight: 600; color: var(--gold); }
+.brand::after { content: 'EST. NEW HAVEN'; font-family: var(--tech); font-size: 9px; letter-spacing: .25em; color: rgba(242,199,92,.75); margin-left: 8px; }
+.nav-link { font-family: var(--tech); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: #cfe6da; border-radius: 999px; padding: 9px 14px; }
+.nav-link:hover { color: #fff; background: rgba(61,255,168,.08); }
+.nav-link.active { color: var(--green-deep); background: var(--gold); }
+.nav-link.cta { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+.nav-link.cta:hover { background: var(--gold); color: var(--green-deep); }
+.nav-user { font-family: var(--serif); font-style: italic; color: var(--gold); }
+.cart-btn { background: rgba(242,199,92,.1); }
+.cart-badge { background: var(--azalea); color: #fff; box-shadow: 0 0 12px rgba(232,74,127,.6); }
+
+/* ---------- Buttons: LCARS pills ---------- */
+.btn { border-radius: 999px; font-family: var(--tech); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; padding: 13px 24px; background: var(--green); box-shadow: 0 6px 18px rgba(0,103,71,.25); transition: transform .15s, box-shadow .2s, background .2s; }
+.btn:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 10px 26px rgba(0,103,71,.35), 0 0 0 3px rgba(61,255,168,.15); }
+.btn:disabled { background: #b9c2bb; box-shadow: none; transform: none; }
+.hero .btn { background: var(--gold); color: var(--green-deep); }
+.hero .btn:hover { background: #ffd978; }
+.btn.ghost { border-color: rgba(242,199,92,.7); color: var(--gold); background: transparent; }
+.btn.light { background: var(--gold); color: var(--green-deep); }
+.btn.ghost-dark { border-color: var(--green); color: var(--green); }
+
+/* ---------- Hero: holodeck at Augusta ---------- */
+.hero {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: radial-gradient(120% 90% at 80% 0%, #0d7a55 0%, var(--green) 35%, var(--green-deep) 100%);
+  border: 1px solid rgba(242,199,92,.35);
+  padding: 72px 56px 88px;
+}
+.hero::before { /* perspective grid "fairway" */
+  content: ''; position: absolute; inset: auto -20% -40% -20%; height: 75%; z-index: -1;
+  background-image: linear-gradient(rgba(61,255,168,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(61,255,168,.22) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(500px) rotateX(62deg);
+  mask-image: linear-gradient(to top, #000 10%, transparent 85%);
+  animation: fairway 6s linear infinite;
+}
+@keyframes fairway { to { background-position: 0 48px; } }
+.hero::after { /* azalea + gold glow orbs */
+  content: ''; position: absolute; z-index: -1; width: 420px; height: 420px; right: -80px; top: -120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,74,127,.45), transparent 65%);
+  box-shadow: -380px 260px 160px -40px rgba(242,199,92,.18);
+}
+.hero h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.02; color: #fff; }
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero .eyebrow { font-family: var(--tech); letter-spacing: .28em; color: var(--glow); font-size: 11px; }
+.hero p { color: #d8ebe1; }
+
+/* LCARS-style feature bars */
+.strip > div { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 18px 18px 18px 4px; padding-left: 28px; overflow: hidden; }
+.strip > div::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: linear-gradient(var(--gold), var(--azalea)); }
+.strip h3 { font-family: var(--serif); }
+
+/* Leaderboard (Home) */
+.leaderboard { background: #fff; border: 2px solid var(--green); border-radius: 14px; overflow: hidden; margin: 8px 0 40px; box-shadow: 0 10px 30px rgba(0,103,71,.12); }
+.leaderboard-head { background: var(--green); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; }
+.leaderboard-head h2 { color: #fff; margin: 0; font-size: 22px; }
+.leaderboard-head span { font-family: var(--tech); font-size: 10px; letter-spacing: .25em; color: var(--gold); }
+.leaderboard ol { list-style: none; margin: 0; padding: 0; }
+.leaderboard li a { display: grid; grid-template-columns: 48px 56px 1fr auto auto; gap: 14px; align-items: center; padding: 10px 18px; border-top: 1px solid var(--line); text-decoration: none; color: var(--ink); transition: background .15s; }
+.leaderboard li a:hover { background: #fbf8ee; }
+.lb-rank { font-family: var(--tech); font-size: 18px; color: var(--green); text-align: center; }
+.leaderboard li:first-child .lb-rank { color: var(--gold-deep); }
+.lb-img { width: 56px; height: 56px; object-fit: contain; }
+.lb-name { font-family: var(--serif); font-weight: 600; font-size: 17px; }
+.lb-stock { font-family: var(--tech); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+.lb-price { font-family: var(--tech); font-weight: 700; color: var(--azalea); background: #fdeef3; border-radius: 6px; padding: 6px 10px; }
+
+/* ---------- Product presentation ---------- */
+.card { background: #fff; border: 1px solid var(--line); border-radius: 16px; transition: transform .2s, box-shadow .25s, border-color .2s; }
+.card:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 16px 40px rgba(1,42,28,.16), 0 0 0 1px var(--gold), 0 0 24px rgba(242,199,92,.25); }
+.card-img { background: radial-gradient(circle at 50% 40%, #fff, #f3efe2); }
+.card-body { border-top: 1px solid var(--line); }
+.card-body h3 { font-family: var(--serif); font-size: 17px; color: var(--ink); }
+.price { font-family: var(--tech); color: var(--green); letter-spacing: .04em; }
+.card-cat { font-family: var(--tech); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; background: var(--green-deep); color: var(--gold); }
+.card-badge.low { background: #fdeef3; color: #a3244f; border-color: #f6c3d4; }
+
+.chip { font-family: var(--tech); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.chip.active, .size-chip.active { background: var(--green); border-color: var(--green); color: var(--gold); }
+.toolbar { background: rgba(255,255,255,.85); border-color: var(--line); }
+.price-filter input[type=range] { accent-color: var(--gold-deep); }
+
+/* Detail page: framed like a trophy case, with viewfinder corners */
+.detail-img { position: relative; background: radial-gradient(circle at 50% 35%, #fff, #efe9d8); border: 1px solid var(--line); border-radius: 22px; }
+.detail-img::before, .detail-img::after { content: ''; position: absolute; width: 34px; height: 34px; border: 2px solid var(--gold); }
+.detail-img::before { top: 12px; left: 12px; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+.detail-img::after { bottom: 12px; right: 12px; border-left: 0; border-top: 0; border-radius: 0 0 10px 0; }
+.detail-info h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.08; }
+.detail-info .eyebrow { font-family: var(--tech); letter-spacing: .25em; color: var(--azalea); }
+.price.big { font-size: 30px; color: var(--green); }
+.size { border-radius: 999px; font-family: var(--tech); font-size: 12px; }
+.size.active { background: var(--green); border-color: var(--green); color: var(--gold); box-shadow: 0 0 0 3px rgba(242,199,92,.35); }
+.add-btn { background: var(--azalea); box-shadow: 0 8px 22px rgba(232,74,127,.35); }
+.add-btn:hover { background: #d63a6e; }
+
+/* ---------- Showcase: holo panel with a scan-line sweep ---------- */
+.showcase { background: radial-gradient(120% 120% at 100% 0%, #0d7a55, var(--green) 40%, var(--green-deep)); border: 1px solid rgba(242,199,92,.4); box-shadow: 0 20px 60px rgba(1,42,28,.35), inset 0 0 60px rgba(61,255,168,.08); }
+.showcase::after { content: ''; position: absolute; left: 0; right: 0; height: 120px; top: -120px; z-index: -1; background: linear-gradient(transparent, rgba(61,255,168,.12), transparent); animation: scan 4.5s linear infinite; }
+@keyframes scan { to { top: 100%; } }
+.showcase-glow { background: radial-gradient(circle, rgba(232,74,127,.35), transparent 65%); }
+.showcase-eyebrow { font-family: var(--tech); color: var(--glow); letter-spacing: .22em; }
+.showcase h2 { font-family: var(--serif); }
+.count-pill { background: var(--gold); font-family: var(--tech); font-size: 11px; letter-spacing: .1em; }
+
+/* ---------- Chat: comms panel ---------- */
+.chat-toggle { background: radial-gradient(circle at 35% 30%, var(--green-mid), var(--green-deep)); border: 2px solid var(--gold); box-shadow: 0 8px 24px rgba(1,42,28,.4), 0 0 0 0 rgba(242,199,92,.6); animation: hail 2.8s ease-out infinite; }
+@keyframes hail { 0% { box-shadow: 0 8px 24px rgba(1,42,28,.4), 0 0 0 0 rgba(242,199,92,.55); } 70%,100% { box-shadow: 0 8px 24px rgba(1,42,28,.4), 0 0 0 16px rgba(242,199,92,0); } }
+.chat-panel { border-radius: 22px 22px 22px 6px; border: 1px solid rgba(242,199,92,.5); box-shadow: 0 24px 60px rgba(1,42,28,.35), 0 0 0 4px rgba(0,103,71,.08); }
+.chat-header { background: linear-gradient(90deg, var(--green-deep), var(--green)); border-bottom: 3px solid var(--gold); position: relative; }
+.chat-header strong { font-family: var(--tech); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+.chat-header strong::before { content: '● '; color: var(--glow); text-shadow: 0 0 8px var(--glow); }
+.chat-context { color: var(--gold); }
+.chat-messages { background: linear-gradient(180deg, #f9f7ef, #f1ede0); }
+.bubble.user { background: linear-gradient(135deg, var(--green), var(--green-deep)); border-bottom-right-radius: 4px; }
+.bubble.assistant { border-color: var(--line); border-left: 3px solid var(--gold); }
+.chat-input { background: #fff; }
+.chat-input input:focus { outline: 2px solid var(--gold); border-color: transparent; }
+.chat-input button { border-radius: 999px; font-family: var(--tech); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; background: var(--green); }
+.chat-showcase-link { background: linear-gradient(90deg, #fff4cc, #fdeef3); color: var(--green-deep); }
+.chat-divider { font-family: var(--tech); letter-spacing: .2em; font-size: 9.5px; color: var(--green-mid); }
+
+/* Cart drawer */
+.cart-drawer { border-left: 3px solid var(--gold); }
+.cart-head { background: var(--green-deep); }
+.cart-head h2 { color: #fff; }
+.cart-x { color: var(--gold); }
+.cart-count { background: var(--azalea); }
+.cart-total strong { font-family: var(--tech); color: var(--green); }
+
+/* Footer: clubhouse sign-off */
+.footer { background: var(--green-deep); color: #cfe6da; border-top: 3px solid var(--gold); font-family: var(--tech); font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; }
+
+/* Auth + about */
+.auth { border-radius: 22px; border-top: 6px solid var(--green); box-shadow: 0 14px 40px rgba(1,42,28,.1); }
+.prose h1 { font-size: 44px; }
+.prose h2 { font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+  .page > *, .hero::before, .showcase::after, .chat-toggle { animation: none; }
+}
+@media (max-width: 760px) { .brand::after { display: none; } .hero { padding: 48px 24px 64px; } }

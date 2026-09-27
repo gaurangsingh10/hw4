@@ -1,0 +1,29 @@
+# Secrets — never commit (use .env.example as the template)
+.env
+.env.*
+!.env.example
+backend/.secret_key
+
+# Local-only data pack (course data: database + product images)
+data/
+data.zip
+*.db
+*.db-journal
+output/audit_trail.corrupt-*.json
+output/*.tmp
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node / Vite
+node_modules/
+frontend/dist/
+*.log
+
+# Editor / OS / local tooling
+.DS_Store
+.vscode/
+.idea/
+.claude/

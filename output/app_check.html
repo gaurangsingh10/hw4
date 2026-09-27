@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Campus Customs: Live App Check (Problem 11)</title>
+<style>
+  :root { --green:#006747; --deep:#012a1c; --gold:#f2c75c; --azalea:#e84a7f; --cream:#f7f4ea; --ink:#10241a; --muted:#5b6b61; --line:#e2dccb; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color:var(--ink); background:var(--cream); line-height:1.55; }
+  header.top { background:var(--deep); color:#fff; padding:28px 32px; border-bottom:4px solid var(--gold); }
+  header.top h1 { margin:0 0 6px; font-family: Georgia, serif; font-size:32px; }
+  header.top p { margin:0; color:#cfe6da; }
+  main { max-width:1100px; margin:0 auto; padding:24px 24px 64px; }
+  nav.toc { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 20px; margin-bottom:28px; }
+  nav.toc a { color:var(--green); }
+  section.check { background:#fff; border:1px solid var(--line); border-left:8px solid var(--green); border-radius:14px; padding:22px 24px; margin:0 0 32px; }
+  section.check h2 { margin:0 0 4px; font-family: Georgia, serif; color:var(--green); font-size:24px; }
+  .req { display:inline-block; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--deep); background:var(--gold); border-radius:999px; padding:3px 10px; margin-bottom:12px; }
+  .pass { display:inline-block; font-size:12px; font-weight:700; color:#1e6b3e; background:#e8f6ee; border:1px solid #bfe3cd; border-radius:999px; padding:3px 10px; margin-left:8px; }
+  figure { margin:14px 0 0; }
+  figure img { width:100%; border:1px solid var(--line); border-radius:10px; display:block; }
+  figcaption { margin-top:10px; font-size:15.5px; }
+  figcaption strong { color:var(--green); }
+  .proof { margin-top:10px; font-size:13.5px; background:#f6f3e9; border:1px solid var(--line); border-radius:8px; padding:10px 14px; }
+  .proof code, code { font-family: ui-monospace, Menlo, monospace; font-size:12.5px; }
+  .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+  @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+  table { border-collapse: collapse; width:100%; font-size:14px; }
+  td, th { border:1px solid var(--line); padding:6px 10px; text-align:left; }
+  th { background:#f1ede0; }
+  footer { text-align:center; color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Campus Customs: Live App Check</h1>
+  <p>Problem 11 · screenshots of the running site (<code>http://localhost:5173</code>, React + FastAPI + PydanticAI agent), taken 27 Sep 2026.</p>
+</header>
+<main>
+  <nav class="toc">
+    <strong>Checks:</strong>
+    <a href="#inventory">1. Chat checks inventory (honest stock &amp; price)</a> ·
+    <a href="#showcase">2. Dynamic search-result cards</a> ·
+    <a href="#usability">3. Problem 9 usability feature (cart)</a> ·
+    <a href="#tour">Extra: site tour</a>
+  </nav>
+
+  <!-- CHECK 1 -->
+  <section class="check" id="inventory">
+    <h2>1. Chat checks an item's inventory level</h2>
+    <span class="req">Required check 1</span><span class="pass">PASS</span>
+    <figure>
+      <img src="app_check_images/inventory.png" alt="Chat on the Basic Hoodie Big Yale page answering stock and price questions" />
+      <figcaption>
+        <strong>What it proves:</strong> on the Basic Hoodie Big Yale page, the shopper asks "How many of <em>this</em> do you have left in XL, is XS in stock, and what does it cost?"
+        The agent works out which item "this" means from the page context, looks it up with its tools, and answers <strong>$68, XL: 2 left (low stock), XS: 15 available</strong>.
+        Those are exactly the values in the database, and the green <strong>✓ Prices &amp; stock checked against live inventory</strong> badge shows the reply passed the server-side fact-check.
+      </figcaption>
+      <div class="proof">
+        Database cross-check:
+        <code>SELECT size, quantity FROM inventory WHERE product_id='basic-hoodie-big-yale' AND size IN ('XS','XL');</code> → <code>XL|2, XS|15</code>
+        · <code>SELECT price FROM catalogue WHERE product_id='basic-hoodie-big-yale';</code> → <code>68.0</code>
+      </div>
+    </figure>
+  </section>
+
+  <!-- CHECK 2 -->
+  <section class="check" id="showcase">
+    <h2>2. Dynamic search-result cards after a category question</h2>
+    <span class="req">Required check 2</span><span class="pass">PASS</span>
+    <figure>
+      <img src="app_check_images/showcase.png" alt="Yale Hoodies results panel with 27 matches rendered as product cards" />
+      <figcaption>
+        <strong>What it proves:</strong> after the shopper types "Show me your hoodies" in the chat, the agent returns a structured <code>showcase</code> (title + search filters).
+        The server re-runs that search on the database, and the site renders a <strong>"Yale Hoodies · 27 matches"</strong> panel of product cards (image, name, price, short description, stock badge).
+        The count matches the database's 27 hoodies, so the cards are real catalogue items and not model output.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="app_check_images/showcase_detail.png" alt="Detail page opened by clicking a chat-generated card" />
+      <figcaption>
+        <strong>What it proves:</strong> clicking the second chat-generated card opened its single-item page (<code>/products/brooks-brothers-double-knit-full-zip-hoodie-yale</code>), with a large image on one side and full details, price and sizes on the other.
+        So cards added by the chat keep the same click-through behavior as the regular Products page.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- CHECK 3 -->
+  <section class="check" id="usability">
+    <h2>3. Problem 9 usability feature: the assistant adds to a real cart</h2>
+    <span class="req">Required check 3</span><span class="pass">PASS</span>
+    <div class="grid2">
+      <figure>
+        <img src="app_check_images/cart_chat.png" alt="Chat adding the Saybrook Sweater Fleece Jacket in M to the cart" />
+        <figcaption>
+          <strong>Agent adds to cart:</strong> on the Saybrook Sweater Fleece Jacket page, "Add this in M to my cart" calls the stock-checked <code>add_to_cart</code> tool.
+          The reply confirms <strong>$98 · subtotal $98</strong>, shows a "🛍 Added 1 × … (M) · View cart" link, and the nav cart badge updates.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="app_check_images/cart_drawer.png" alt="Cart drawer showing the item the chat added" />
+        <figcaption>
+          <strong>It's a real cart:</strong> opening 🛍 Cart shows the line the chat added (Saybrook Sweater Fleece Jacket, size M, $98.00), with a quantity stepper capped at the stock and the subtotal.
+          Shoppers can go from conversation to cart without leaving the page.
+        </figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img src="app_check_images/products_filters.png" alt="Products page filtered to hoodies in stock in M under $70 sorted by price" />
+      <figcaption>
+        <strong>Bonus (Problem 9 feature 2): smarter Products page.</strong> The shareable URL <code>?cat=Hoodies&amp;size=M&amp;max=70&amp;sort=price-asc</code> loads with <strong>19 of 102 items</strong> (hoodies in stock in M, ≤ $70, cheapest first).
+        That matches the equivalent SQL query exactly (19).
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- TOUR -->
+  <section class="check" id="tour">
+    <h2>Extra: site tour (screenshots from the shopper's Chrome)</h2>
+    <span class="req">Context</span>
+    <div class="grid2">
+      <figure><img src="app_check_images/user_home.webp" alt="Home hero" /><figcaption><strong>Home:</strong> the Masters-inspired, futuristic hero with a single clear call to action (Problem 10 design).</figcaption></figure>
+      <figure><img src="app_check_images/user_leaderboard.webp" alt="Home leaderboard" /><figcaption><strong>Leaderboard:</strong> fan favorites shown as a golf scoreboard with live stock and prices from the database.</figcaption></figure>
+      <figure><img src="app_check_images/user_products.webp" alt="Products page" /><figcaption><strong>Products:</strong> all 102 catalogue items, with the sort, size, price and category toolbar.</figcaption></figure>
+      <figure><img src="app_check_images/user_about.webp" alt="About page" /><figcaption><strong>About Us:</strong> the store story in the owner's voice, using the new type hierarchy.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="check">
+    <h2>How these were captured</h2>
+    <table>
+      <tr><th>Screenshot</th><th>Source</th></tr>
+      <tr><td>inventory, showcase, showcase_detail, cart_chat, cart_drawer, products_filters (.png)</td><td>Captured automatically from the live site: headless Chrome (1440×900) typed into the real chat widget and clicked the real UI, with the live agent answering. The raw replies are saved in <code>app_check_images/capture_log.json</code>.</td></tr>
+      <tr><td>user_home, user_leaderboard, user_products, user_about (.webp)</td><td>Provided by the student from their own Chrome session.</td></tr>
+    </table>
+  </section>
+  <footer>Campus Customs · HW4 · Problem 11</footer>
+</main>
+</body>
+</html>
