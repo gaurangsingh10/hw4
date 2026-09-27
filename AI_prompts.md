@@ -129,4 +129,4 @@ A record of the prompts I sent to Claude Code while working on this assignment.
 **Prompts:**
 1. "now problem 13:" (+ screenshot of the Problem 13 instructions: put the code in a public GitHub repo with the expected `hw4/` layout — AI_prompts.md, requirements.txt, .env.example, .gitignore, README.md, frontend/, backend/, output/ — and keep `.env`, `campus_customs.db`, and product images out of git)
 
-**Follow-up needed:** _TBD_
+**Follow-up needed:** None. (I confirmed the public repo name before publishing: github.com/gaurangsingh10/hw4.)
